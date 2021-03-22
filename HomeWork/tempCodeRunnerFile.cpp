@@ -36,49 +36,41 @@ int main()
     vector<int> Values; // Store all item's value
     vector<int> Weights; // Store all item's weight
     vector<int> SumWs;
-    cin >> N >> K;
+
     // number of items / value limit
-    // while(cin >> N >> K)
-    // {
-    if (N <= 0)
+    while(cin >> N >> K)
     {
-        cout << "Error" << endl;
-        //break;
-        return 0;
-    }
-
-
-    for (int i=0; i<N; i++)
-    {
-        int Vi; // Item's value
-        int Wi; // Item's weight
-        cin >> Vi >> Wi;
-        Values.push_back(Vi);
-        Weights.push_back(Wi);
-    }
-
-    if (K == 0)
-    {
-        cout << "0" << endl;
-        //break;
-        return 0;
-    }
-
-    for (int i=0; i<Values.size(); i++) // Use recursive sum
-    {
-        int SumV = Values[i];
-        int SumW = Weights[i];
-        if (SumV >= K)
+        if (N <= 0)
         {
-           SumWs.push_back(SumW);
-           continue;
+            cout << "Error" << endl;
+            break;
         }
-        Rsum(K, Values, Weights, SumV, SumW, i+1, SumWs);
+
+        for (int i=0; i<N; i++)
+        {
+            int Vi; // Item's value
+            int Wi; // Item's weight
+            cin >> Vi >> Wi;
+            Values.push_back(Vi);
+            Weights.push_back(Wi);
+        }
+
+        for (int i=0; i<Values.size(); i++) // Use recursive sum
+        {
+            int SumV = Values[i];
+            int SumW = Weights[i];
+            if (SumV == K)
+            {
+               SumWs.push_back(SumW);
+               continue;
+            }
+            Rsum(K, Values, Weights, SumV, SumW, i+1, SumWs);
+        }
+
+        int min = *min_element(SumWs.begin(), SumWs.end()); // Find min value of SumWs
+        cout << '\n' << min << endl;
+        SumWs.clear();
     }
 
-    int min = *min_element(SumWs.begin(), SumWs.end()); // Find min value of SumWs
-    cout << min << '\n'  << endl;
-    SumWs.clear();
-    //}
     return 0;
 }
