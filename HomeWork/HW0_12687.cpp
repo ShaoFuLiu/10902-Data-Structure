@@ -46,7 +46,12 @@ int main()
         //break;
         return 0;
     }
-
+    if (K == 0)
+    {
+        cout << "0" << endl;
+        //break;
+        return 0;
+    }
 
     for (int i=0; i<N; i++)
     {
@@ -55,13 +60,6 @@ int main()
         cin >> Vi >> Wi;
         Values.push_back(Vi);
         Weights.push_back(Wi);
-    }
-
-    if (K == 0)
-    {
-        cout << "0" << endl;
-        //break;
-        return 0;
     }
 
     for (int i=0; i<Values.size(); i++) // Use recursive sum
