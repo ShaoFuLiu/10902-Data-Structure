@@ -185,14 +185,15 @@ void insert(int L)
 
     if (CkCk)
     {
-        if (strlen(c) == 1)
-        {
-            // cout << "c=1" << endl;
-            Ck = true;
-        }
+        // if (strlen(c) == 1)
+        // {
+        //     len2 =  A[lp].rear();
+        //     cout << "\n" << A[lp].rear() << endl;
+        //     Ck = true;
+        // }
 
-        else
-        {
+        // else
+        // {
             for (int i = lp; i < lp + strlen(c); i++)
             {
                 for (int j = A[i].rear()-1; j >= 0; j--)
@@ -245,7 +246,7 @@ void insert(int L)
 
             else
                 Ck = false;
-        }
+        // }
     }
 
     for (int i = 0; i < L; i++)
