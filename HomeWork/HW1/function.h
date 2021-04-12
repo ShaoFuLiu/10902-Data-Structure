@@ -7,7 +7,6 @@ using namespace std;
 
 // TODO: Implement all member functions in BaseStack
 template <class T>
-
 class BaseStack
 {
     public:
@@ -16,12 +15,6 @@ class BaseStack
 
         // Destructor
         ~BaseStack();
-
-        // Print data
-        void print(int data)
-        {
-            cout << data << endl;
-        };
 
         // Check if the stack is empty
         bool empty()
@@ -59,18 +52,18 @@ class BaseStack
         // Delete one element from top
         void pop()
         {
-            // if(empty())
-            // {
-            //     cout << "Stack is empty. Cannot delete." << endl;
-            // }
-            // else()
+            if(empty())
+            {
+                cout << "Stack is empty. Cannot delete." << endl;
+            }
+            else
             _stack [ _top-- ].~T(); // Delete the element
             capacity--;
         };
 
     private:
         T* _stack;
-        int _top;
+        int _top = -1;
         int capacity = 0;
 };
 
@@ -80,9 +73,9 @@ void insert(int L)
     int lp; // Starting slot
     string s;
     cin >> lp >> s;
-    cout << lp << s << endl;
-    BaseStack<string> A;
-    cout << A.empty() << endl;
+    // cout << lp << s << endl;
+    BaseStack<int> Stack;
+    Stack.pop();
 };
 
 string first_row(int L, bool print = false)

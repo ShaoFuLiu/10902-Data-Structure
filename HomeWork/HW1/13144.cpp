@@ -15,7 +15,6 @@ For Dev C++ or other IDE, please search for the Internet.
 */
 
 int main(void) {
-    cout << "a" << endl;
     int L, C;
     string command;
 
