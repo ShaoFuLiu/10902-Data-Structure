@@ -1,6 +1,7 @@
 #include "function.h"
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 /*
@@ -15,7 +16,6 @@ For Dev C++ or other IDE, please search for the Internet.
 */
 
 int main(void) {
-    cout << "a" << endl;
     int L, C;
     string command;
 
@@ -38,6 +38,9 @@ int main(void) {
         }
         else if (command == "RESET") {
             reset(L);
+        }
+        else if (command == "P") {
+            Print(L, C);
         }
     }
 }
