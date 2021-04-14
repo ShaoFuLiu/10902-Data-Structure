@@ -1,15 +1,17 @@
-#include <iostream> 
+#include <iostream>
 #include <stdio.h>
 #include <string.h>
 
-using namespace std; 
+using namespace std;
 
-int main () 
-{ 
-    char input[100000]; 
-    cin.getline(input,100000);
+int main ()
+{
+    stack<int> my_stackl;
+    char input[1000];
+    cin.getline(input,1000);
 
-    for (int i=0; i<strlen(input); i++) 
+
+    for (int i=0; i<strlen(input); i++)
         if ( input[i] == ' ' )
         {
             cout << endl;
@@ -22,6 +24,6 @@ int main ()
                 cout << endl;
             }
         }
-        
+
     return 0;
-} 
+}
