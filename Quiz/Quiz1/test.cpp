@@ -19,7 +19,7 @@ int main()
     int line = 10000;
 
     cin >> N;
-    getline(cin, line);
+
     t.push_back(line);
     ss0 << t[0];
     ss0 >> s0;
