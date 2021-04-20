@@ -32,7 +32,7 @@ int Rsum(int K, vector<int> Values, vector<int> Weights, int SumV, int SumW, int
 int main()
 {
     int N; // Number of items
-    int K; // How much weight can the bag hold
+    int K; // Value at least we need
     vector<int> Values; // Store all item's value
     vector<int> Weights; // Store all item's weight
     vector<int> SumWs;
