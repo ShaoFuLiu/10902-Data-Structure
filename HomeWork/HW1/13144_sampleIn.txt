@@ -1,0 +1,14 @@
+10
+12
+INSERT 0 kasumi
+INSERT 0 hanako
+INSERT 1 olivia
+INSERT 8 ok
+BOTTOM_ROW
+QUERY kasumi@
+QUERY olivia
+QUERY hanako@ok
+QUERY hanako
+QUERY ok
+FLUSH
+RESET

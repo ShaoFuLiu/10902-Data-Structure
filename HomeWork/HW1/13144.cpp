@@ -1,6 +1,7 @@
 #include "function.h"
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 /*
@@ -37,6 +38,9 @@ int main(void) {
         }
         else if (command == "RESET") {
             reset(L);
+        }
+        else if (command == "P") {
+            Print(L, C);
         }
     }
 }
