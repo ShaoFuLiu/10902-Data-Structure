@@ -18,17 +18,17 @@ class Tree
 {
     public:
 		int col, row;
-		vector<vector<int> > mat;
 		vector<int> Sums;
 		vector<string> Derc;
+		vector<vector<int> > mat;
+		bool check_end(int x, int y);
 		void Build(int Rx, int Ry);
         void add_L(int x, int y);
 		void add_R(int x, int y);
 		void add_U(int x, int y);
 		void add_D(int x, int y);
-		void minPathSum(int Rx, int Ry); 												// return min path value
-
-        Tree()
+		void minPathSum(); 												// return min path value
+        Tree(int value)
         {
 			root = NULL;
         }
@@ -38,7 +38,8 @@ int main(void)
 {
 	int row, col, value, Rx, Ry;
 	cin >> row >> col;
-	cin >> Rx >> Ry;
+	Rx = 0;
+	Ry = 0;
 	vector<vector<int> > mat(row, vector<int>(col));
 	for(int i = 0; i < row; i++)
 	{
@@ -49,12 +50,29 @@ int main(void)
 		}
 	}
 
-	Tree tree;
-	tree.mat = mat;
-	tree.col = col-1; // minus 1 because index start from 0
-	tree.row = row-1; // minus 1 because index start from 0
-	tree.Build(Rx, Ry);
-	tree.minPathSum(Rx, Ry);
+	if (mat[row-1][col-1] == 0)
+	{
+		cout << 0 << "\n";
+	}
+	else
+	{
+		Tree tree(mat[Ry][Rx]);
+		tree.mat = mat;
+		tree.col = col-1; // minus 1 because index start from 0
+		tree.row = row-1; // minus 1 because index start from 0
+		tree.Build(Rx, Ry);
+		tree.minPathSum();
+		// tree.Traverse();
+	}
+}
+
+bool Tree::check_end(int x, int y)
+{
+	if (x != col || y != row)
+	{
+		return false;
+	}
+	return true;
 }
 
 void Tree::Build(int Rx, int Ry)
@@ -62,7 +80,7 @@ void Tree::Build(int Rx, int Ry)
 	if (Rx-1 >= 0 && mat[Ry][Rx-1] != 0)					// left
 	{
 		Derc.push_back("@");
-		add_L( Rx-1, Ry);
+		add_L(Rx-1, Ry);
 		Derc.push_back("/");
 	}
 	if (Rx+1 <= col && mat[Ry][Rx+1] != 0)					// right
@@ -103,6 +121,10 @@ void Tree::add_L(int x, int y)
 	}
 	else
 	{
+		if (check_end(x, y))
+		{
+			Derc.push_back("*");
+		}
 		Derc.push_back("/");
 	}
 }
@@ -125,6 +147,10 @@ void Tree::add_R(int x, int y)
 	}
 	else
 	{
+		if (check_end(x, y))
+		{
+			Derc.push_back("*");
+		}
 		Derc.push_back("/");
 	}
 }
@@ -147,6 +173,10 @@ void Tree::add_U(int x, int y)
 	}
 	else
 	{
+		if (check_end(x, y))
+		{
+			Derc.push_back("*");
+		}
 		Derc.push_back("/");
 	}
 }
@@ -169,33 +199,40 @@ void Tree::add_D(int x, int y)
 	}
 	else
 	{
+		if (check_end(x, y))
+		{
+			Derc.push_back("*");
+		}
 		Derc.push_back("/");
 	}
 }
 
-void Tree::minPathSum(int Rx, int Ry)
+void Tree::minPathSum()
 {
 	int k = 0;
 	int counter = 0;
 	int sum = 0;
-
+	bool path = false;
 	while (true)
 	{
 		if (Derc[k]  == "@") // "@"
 		{
-			sum = mat[Ry][Rx];
+			sum = 1;
 			counter = 0;
 			k += 1;
 			continue;
 		}
 
+		if (Derc[k] == "*") // "*"
+		{
+			Derc.erase(Derc.begin()+k);
+			path = true;
+			continue;
+		}
+
 		if (Derc[k] != "@" && Derc[k] != "/") // "R"
 		{
-			if (Derc[k] == "-1")
-			{
-				Derc[k] = "100000";
-			}
-			sum += stoi(Derc[k]);
+			sum += 1;
 			k += 1;
 			continue;
 		}
@@ -210,7 +247,11 @@ void Tree::minPathSum(int Rx, int Ry)
 		if (Derc[k] == "/" && Derc[k+1] == *(Derc.end())) // End
 		{
 			vector<string>().swap(Derc);
-			Sums.push_back(sum);
+			if (path == true)
+			{
+				Sums.push_back(sum);
+				break;
+			}
 			break;
 		}
 
@@ -222,14 +263,18 @@ void Tree::minPathSum(int Rx, int Ry)
 			{
 				Derc.erase(Derc.begin()+k-2*counter);
 			}
-			Sums.push_back(sum);
+			if (path == true)
+			{
+				Sums.push_back(sum);
+				break;
+			}
 			counter = 0;
 			sum = 0;
 			k = 0;
 			continue;
 		}
 
-		if (Derc[k] == "/" && Derc[k+1] == "@")  // Initialize /@
+		if (Derc[k] == "/" && Derc[k+1] == "@")  // Initialize "/@"
 		{
 			counter = counter + 1;
 			k = k + 1;
@@ -237,7 +282,13 @@ void Tree::minPathSum(int Rx, int Ry)
 			{
 				Derc.erase(Derc.begin());
 			}
-			Sums.push_back(sum);
+			if (path == true)
+			{
+				Sums.push_back(sum);
+				break;
+			}
+			counter = 0;
+			sum = 0;
 			k = 0;
 			continue;
 		}
