@@ -12,7 +12,7 @@ class BaseStack
 {
     public:
         // Constructor
-        BaseStack():_top(-1),capacity(50) // initial state: top=-1, capacity=20
+        BaseStack():_top(-1),capacity(20) // initial state: top=-1, capacity=20
         {
             _stack = new T[capacity];
         };
@@ -88,7 +88,7 @@ class BaseQueue
 {
     public:
         // Constructor
-        BaseQueue():capacity(100),_front(-1),_rear(-1)
+        BaseQueue():capacity(20),_front(-1),_rear(-1)
         {
             _queue = new T[capacity];
         };
@@ -134,7 +134,7 @@ class BaseQueue
         // Insert a new element at rear
         void push(const T& item)
         {
-            // cout << "QUEUE PUSH" << endl;
+            cout << "QUEUE PUSH" << endl;
             // if (_rear + 1 == capacity)
             // {
             //     DoubleCapacity();
@@ -145,7 +145,7 @@ class BaseQueue
         // Delete one element from front
         void pop()
         {
-            // cout << "QUEUE POP" << endl;
+            cout << "QUEUE POP" << endl;
             if (empty())
             {
                 cout << "Queue is empty.\n";
@@ -160,38 +160,131 @@ class BaseQueue
         int capacity;
 };
 
-BaseQueue<string> * A = new BaseQueue<string>[10];
+BaseQueue<string> * A = new BaseQueue<string>[100];
 BaseStack<string> * B = new BaseStack<string>[1];
 
 // TODO: Implement five types of command
 void insert(int L)
 {
     int lp; // Starting slot
+    int e = 0;
+    int len = 0;
+    int len2 = 0;
+    int len3 = 0;
     char c[L];
     cin >> lp >> c;
-    int pos = 0;
-    for (int i = lp; i < lp+strlen(c); i++)
+    bool Ck; // 檢查要不要補@
+    bool CkCk; //檢查 檢查要不要補@
+
+    for (int i = 0; i < L; i++)
     {
-        if (A[i].size() > pos)
-            pos = A[i].size();
+        if (A[i].empty())
+        {
+            if (i != L-1)
+                continue;
+            else
+                CkCk = false;
+        }
         else
-            continue;
+        {
+            CkCk = true; // 代表那排有東西
+            break;
+        }
     }
 
-    int lc = 0;
-    for (int i = lp; i < lp+strlen(c); i++)
+    if (CkCk)
     {
-        for (int j = A[i].rear(); j < pos; j++)
+        for (int i = lp; i < lp + strlen(c); i++)
         {
-            if (A[i].top(j) != "")
+            for (int j = A[i].rear()-1; j >= 0; j--)
+            {
+                if (A[i].rear()-1 == 0)
+                {
+                    Ck = false;
+                    len2 = 1;
+                    break;
+                }
+                else
+                {
+                    if (A[i].top(j) != " ")
+                    {
+                        // cout << "\nj+1 = " << j+1;
+                        len2 = j+1;
+                        if (len2-1 == A[i].rear()-1)
+                        {
+                            Ck = false;
+                            break;
+                        }
+                        if (i == lp)
+                            len3 = len2;
+                        break;
+                    }
+                }
+            }
+            // cout << "\nlen3 = " << len3 << " \nlen2 = " << len2;
+            if (i != lp)
+            {
+                if (len3 - len2 != 0)
+                {
+                    // cout << "\nlen3 != len2 " << endl;
+                    len = 1;
+                    break;
+                }
+                else
+                    len = 0;
+                    continue;
+            }
+            else
+            {
                 continue;
-            if (A[i].top(j) == "")
-                A[i].push("@");
+            }
+
+            // cout << "\nlen = " << len << endl;
         }
-        string s(1, c[lc]);
-        // cout << s;
-        A[i].push(s);
-        lc += 1;
+        if (len == 0)
+            Ck = true;
+        else
+            Ck = false;
+    }
+
+    for (int i = 0; i < L; i++)
+    {
+        if(i >= lp && i < lp + strlen(c))
+        {
+            if (A[i].rear() == 0)
+            {
+                string s(1, c[e]);
+                A[i].push(s);
+                e++;
+            }
+            else
+            {
+                if(Ck)
+                {
+                    string s(1, c[e]);
+                    A[i].top(len2) = s;
+                    e++;
+                }
+                else
+                {
+                    for (int j = 0; j <= A[i].rear()-1; j++)
+                    {
+                        if (A[i].top(j) == " ")
+                            A[i].top(j) = "@";
+                    }
+                    string s(1, c[e]);
+                    A[i].push(s);
+                    e++;
+                }
+            }
+        }
+        else
+        {
+            if (Ck)
+                continue;
+            else
+                A[i].push(" ");
+        }
     }
 };
 
@@ -201,7 +294,7 @@ void Print(int L, int c)
     {
         for (int i = 0; i < L; i++)
         {
-            if (A[i].top(n) == "")
+            if (A[i].empty())
                 cout << " ";
             else
                 cout << A[i].top(n);
@@ -218,7 +311,6 @@ void Print(int L, int c)
 
 string first_row(int L, bool print = false) // It will return BOTTOM_ROW
 {
-    cout << "BOTTOM_ROW" << endl;
     int l = 0;
     string s;
     for (int i = 0; i <L; i++)
@@ -228,21 +320,27 @@ string first_row(int L, bool print = false) // It will return BOTTOM_ROW
             l++;
         }
     }
-
-    for (int i = 0; i < L; i++)
+    if (l == L)
     {
-        if (A[i].top(0) == "")
-        {
-            cout << "~";
-            s = s + "~";
-            continue;
-        }
-
-        cout << A[i].top(0);
-        s = s + A[i].top(0);
+        print == false;
     }
-    cout << endl;
+    else
+    {
+        cout << "BOTTOM_ROW" << endl;
+        for (int i = 0; i < L; i++)
+        {
+            if (A[i].top(0) == " ")
+            {
+                cout << "~";
+                s = s + "~";
+                continue;
+            }
 
+            cout << A[i].top(0);
+            s = s + A[i].top(0);
+        }
+        cout << endl;
+    }
     return s;
 };
 
@@ -255,10 +353,7 @@ void query(int L)
 
     for (int i = 0; i < L; i++)
     {
-        if (A[i].top(0) != "")
-            str1 += A[i].top(0);
-        else
-            str1 += " ";
+        str1 += A[i].top(0);
     }
     int a = str1.find(str2);
     if (a != -1)
@@ -274,8 +369,8 @@ void query(int L)
 
 void flush()
 {
-    cout << "FLUSH" << endl;
     int N = B[0].size();
+    cout << "FLUSH" << endl;
     for (int i = 0; i < N; i++)
     {
         cout << B[0].top() << endl;
@@ -287,7 +382,7 @@ void reset(int L)
 {
     delete [] A;
     delete [] B;
-    BaseQueue<string> * A = new BaseQueue<string>[10];
+    BaseQueue<string> * A = new BaseQueue<string>[100];
     BaseStack<string> * B = new BaseStack<string>[1];
 };
 

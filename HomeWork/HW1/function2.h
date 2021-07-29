@@ -159,17 +159,16 @@ class BaseQueue
 };
 
 BaseQueue<string> * A = new BaseQueue<string>[100];
-BaseStack<string> * B = new BaseStack<string>[100];
-
-bool Check(BaseQueue<string> * A, char c, int L, int lp);
+BaseStack<string> * B = new BaseStack<string>[1];
 
 // TODO: Implement five types of command
 void insert(int L)
 {
     int lp; // Starting slot
     int e = 0;
-    int len1 = 0;
     int len = 0;
+    int len2 = 0;
+    int len3 = 0;
     char c[L];
     cin >> lp >> c;
     bool Ck;
@@ -183,31 +182,71 @@ void insert(int L)
                  CkCk = false;
         else
              CkCk = true;
-//// A[i].rear()-1 = ith col top element position number
+
     if (CkCk)
     {
-        for (int i = lp; i < lp + strlen(c); i++)
-        {
-            for (int j = A[i].rear()-1; j >= 0; j--)
+        // if (strlen(c) == 1)
+        // {
+        //     len2 =  A[lp].rear();
+        //     cout << "\n" << A[lp].rear() << endl;
+        //     Ck = true;
+        // }
+
+        // else
+        // {
+            for (int i = lp; i < lp + strlen(c); i++)
             {
-                if (A[i].top(j) != "*")
+                for (int j = A[i].rear()-1; j >= 0; j--)
                 {
-                    len = j+1; // Should put position
+                    if (A[i].rear()-1 == 0)
+                    {
+                        Ck = false;
+                        len2 = 1;
+                        break;
+                    }
+                    else
+                    {
+                        if (A[i].top(j) != "*")
+                        {
+                            // cout << "\nj+1 = " << j+1;
+                            len2 = j+1;
+                            if (len2-1 == A[i].rear()-1)
+                            {
+                                Ck = false;
+                                break;
+                            }
+                            if (i == lp)
+                                len3 = len2;
+                            break;
+                        }
+                    }
                 }
+                // cout << "\nlen3 = " << len3 << " \nlen2 = " << len2;
+                if (i != lp)
+                {
+                    if (len3 - len2 != 0)
+                    {
+                        // cout << "\nlen3 != len2 " << endl;
+                        len = 1;
+                        break;
+                    }
+                    else
+                        len = 0;
+                        continue;
+                }
+                else
+                {
+                    continue;
+                }
+
+                // cout << "\nlen = " << len << endl;
             }
-            if (i == 0)
-                len1 = len;
-            if (len != len1)
-            {
-                Ck == false;
-                break;
-            }
+            if (len == 0)
+                Ck = true;
+
             else
-            {
-                Ck == false;
-                continue;
-            }
-        }
+                Ck = false;
+        // }
     }
 
     for (int i = 0; i < L; i++)
@@ -216,28 +255,27 @@ void insert(int L)
         {
             if (A[i].rear() == 0)
             {
-                cout << "2";
                 string s(1, c[e]);
                 A[i].push(s);
                 e++;
             }
             else
             {
-                for (int j = 0; j <= A[i].rear()-1; j++)
-                {
-                    if (A[i].top(j) == "*")
-                        A[i].top(j) = "@";
-                }
-                string s(1, c[e]);
-                A[i].push(s);
-                e++;
-
                 if(Ck)
                 {
-                    cout << "3";
-                    cout << "\nlen = " << len << endl;
                     string s(1, c[e]);
-                    A[i].top(len) = s;
+                    A[i].top(len2) = s;
+                    e++;
+                }
+                else
+                {
+                    for (int j = 0; j <= A[i].rear()-1; j++)
+                    {
+                        if (A[i].top(j) == "*")
+                            A[i].top(j) = "@";
+                    }
+                    string s(1, c[e]);
+                    A[i].push(s);
                     e++;
                 }
             }
@@ -245,17 +283,11 @@ void insert(int L)
         else
         {
             if (Ck)
-            {
-                cout << "4";
-                A[i].push("*");
-            }
-            else
-            {
                 continue;
-            }
+            else
+                A[i].push("*");
         }
     }
-    cout << endl;
 };
 
 void Print(int L, int c)
@@ -268,37 +300,73 @@ void Print(int L, int c)
         }
         cout << endl;
     }
-}
+
+};
 
 string first_row(int L, bool print = false) // It will return BOTTOM_ROW
 {
-    if (print == true)
+    int l = 0;
+    string s;
+    for (int i = 0; i <L; i++)
     {
-
+        if (A[i].empty())
+        {
+            l++;
+        }
+    }
+    if (l == L)
+    {
+        print == false;
+    }
+    else
+    {
         cout << "BOTTOM_ROW" << endl;
         for (int i = 0; i < L; i++)
         {
+            if (A[i].top(0) == "*")
+            {
+                cout << "~";
+                s = s + "~";
+                continue;
+            }
+
             cout << A[i].top(0);
-            B[i].push(A[i].top(0));
+            s = s + A[i].top(0);
         }
+        cout << endl;
     }
-    return B[0].top();
+    return s;
 };
 
 void query(int L)
 {
-    string s;
-    cin >> s;
-    if (A[0].top(0) == s)
+    int i = 0;
+    bool print;
+    char c[100000];
+    cin >> c;
+    string str1;
+    string str2(c);
+
+    for (int i = 0; i < L; i++)
     {
-        B[0].push(A[0].top(0));
-        A[0].pop();
+        str1 += A[i].top(0);
+    }
+    int a = str1.find(str2);
+    if (a != -1)
+    {
+        B[0].push(str2);
+        for (int i = a; i < a + str2.length(); i++)
+        {
+            A[i].push("*");
+            A[i].pop();
+        }
     }
 };
 
 void flush()
 {
     int N = B[0].size();
+    cout << "FLUSH" << endl;
     for (int i = 0; i < N; i++)
     {
         cout << B[0].top() << endl;
@@ -310,6 +378,8 @@ void reset(int L)
 {
     delete [] A;
     delete [] B;
+    BaseQueue<string> * A = new BaseQueue<string>[100];
+    BaseStack<string> * B = new BaseStack<string>[1];
 };
 
 // The codes bellow prevent you from importing C++ containers.
@@ -370,31 +440,3 @@ void reset(int L)
 #ifndef priority_queue
 #define priority_queue
 #endif
-
-// // TODO:
-//     // Constructor
-//     BaseQueue();
-
-//     // Destructor
-//     ~BaseQueue();
-
-//     // Check if the stack is empty
-//     bool empty();
-
-//     // Return the size of the queue
-//     int size();
-
-//     // Return the front element
-//     T& front();
-
-//     // Insert a new element at rear
-//     void push(const T& item);
-
-//     // Delete one element from front
-//     void pop();
-
-// private:
-//     T* _queue;
-//     int _front, _rear;
-//     int capacity;
-// };
